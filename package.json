@@ -9,10 +9,16 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "keywords": ["axkan", "souvenirs", "mexico", "magnets"],
+  "keywords": [
+    "axkan",
+    "souvenirs",
+    "mexico",
+    "magnets"
+  ],
   "author": "VT Anunciando",
   "license": "UNLICENSED",
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "autoprefixer": "^10.4.23",
