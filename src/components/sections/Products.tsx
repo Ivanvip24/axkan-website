@@ -2,39 +2,62 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 
-const products = [
+type Category = {
+  _id: string
+  name: string
+  slug: { current: string }
+  description: string
+  color: string
+  image: { url: string } | null
+}
+
+type ProductsProps = {
+  categories: Category[]
+}
+
+const colorMap: Record<string, string> = {
+  magenta: 'bg-axkan-magenta',
+  verde: 'bg-axkan-verde',
+  naranja: 'bg-axkan-naranja',
+  turquesa: 'bg-axkan-turquesa',
+  rojo: 'bg-axkan-rojo',
+}
+
+// Fallback data when Sanity has no categories yet
+const fallbackCategories: Category[] = [
   {
+    _id: '1',
     name: 'Imanes de MDF',
+    slug: { current: 'imanes' },
     description: 'Captura tus destinos favoritos con nuestros imanes premium de MDF con acabado brillante.',
-    price: 'Desde $15',
-    image: '/images/products/magnet-placeholder.jpg',
-    color: 'bg-axkan-magenta',
-    popular: true,
+    color: 'magenta',
+    image: null,
   },
   {
+    _id: '2',
     name: 'Llaveros',
+    slug: { current: 'llaveros' },
     description: 'Lleva México contigo a todos lados con nuestros llaveros de alta resistencia.',
-    price: 'Desde $18',
-    image: '/images/products/keychain-placeholder.jpg',
-    color: 'bg-axkan-turquesa',
-    popular: false,
+    color: 'turquesa',
+    image: null,
   },
   {
+    _id: '3',
     name: 'Destapadores',
+    slug: { current: 'destapadores' },
     description: 'Funcionales y decorativos, perfectos para cualquier ocasión mexicana.',
-    price: 'Desde $25',
-    image: '/images/products/opener-placeholder.jpg',
-    color: 'bg-axkan-verde',
-    popular: false,
+    color: 'verde',
+    image: null,
   },
   {
+    _id: '4',
     name: 'Portallaves',
+    slug: { current: 'portallaves' },
     description: 'Decora tu hogar con arte mexicano funcional que cuenta historias.',
-    price: 'Desde $45',
-    image: '/images/products/keyholder-placeholder.jpg',
-    color: 'bg-axkan-naranja',
-    popular: false,
+    color: 'naranja',
+    image: null,
   },
 ]
 
@@ -43,7 +66,10 @@ const destinations = [
   'San Miguel', 'Puerto Vallarta', 'Chiapas', 'Yucatán', 'Acapulco',
 ]
 
-export default function Products() {
+export default function Products({ categories }: ProductsProps) {
+  // Use Sanity categories or fallback to default
+  const displayCategories = categories.length > 0 ? categories : fallbackCategories
+
   return (
     <section id="productos" className="py-24 bg-gradient-to-b from-white to-crema relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,42 +106,48 @@ export default function Products() {
 
         {/* Products Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {products.map((product, index) => (
+          {displayCategories.map((category, index) => (
             <motion.div
-              key={product.name}
+              key={category._id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
             >
-              {/* Popular Badge */}
-              {product.popular && (
+              {/* First category gets Popular badge */}
+              {index === 0 && (
                 <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-axkan-rojo text-white text-xs font-bold rounded-full">
                   Más Popular
                 </div>
               )}
 
-              {/* Product Image Placeholder */}
-              <div className={`h-48 ${product.color} flex items-center justify-center relative overflow-hidden`}>
-                <div className="text-6xl opacity-30">🎨</div>
+              {/* Category Image */}
+              <div className={`h-48 ${colorMap[category.color] || 'bg-axkan-magenta'} flex items-center justify-center relative overflow-hidden`}>
+                {category.image?.url ? (
+                  <Image
+                    src={category.image.url}
+                    alt={category.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="text-6xl opacity-30">🎨</div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
 
-              {/* Product Info */}
+              {/* Category Info */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-obsidiana mb-2 font-display">
-                  {product.name}
+                  {category.name}
                 </h3>
                 <p className="text-obsidiana/60 text-sm mb-4 leading-relaxed">
-                  {product.description}
+                  {category.description || 'Descubre nuestra colección de productos mexicanos.'}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-axkan-magenta">
-                    {product.price}
-                  </span>
                   <Link
-                    href={`/catalogo?category=${product.name}`}
+                    href={`/catalogo?category=${category.slug.current}`}
                     className="text-sm font-semibold text-axkan-turquesa hover:text-axkan-magenta transition-colors"
                   >
                     Ver más →
