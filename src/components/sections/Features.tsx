@@ -36,7 +36,7 @@ export default function Features() {
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="py-24 bg-white relative overflow-hidden" aria-labelledby="features-heading">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -56,6 +56,7 @@ export default function Features() {
             ¿Por qué AXKAN?
           </motion.span>
           <motion.h2
+            id="features-heading"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -93,7 +94,7 @@ export default function Features() {
 
               <div className="relative">
                 {/* Icon */}
-                <div className="text-5xl mb-6">{feature.icon}</div>
+                <div className="text-5xl mb-6" aria-hidden="true">{feature.icon}</div>
 
                 {/* Title */}
                 <h3 className="text-xl font-bold text-obsidiana mb-3 font-display">

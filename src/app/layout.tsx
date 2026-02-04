@@ -47,7 +47,12 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${inter.variable} ${montserrat.variable}`}>
       <body className="min-h-screen bg-crema text-obsidiana antialiased">
-        {children}
+        <a href="#main-content" className="skip-link">
+          Saltar al contenido principal
+        </a>
+        <div id="main-content">
+          {children}
+        </div>
       </body>
     </html>
   )

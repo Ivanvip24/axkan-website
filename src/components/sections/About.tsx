@@ -11,7 +11,11 @@ const stats = [
 
 export default function About() {
   return (
-    <section id="nosotros" className="py-24 bg-obsidiana text-white relative overflow-hidden">
+    <section
+      id="nosotros"
+      className="py-24 bg-obsidiana text-white relative overflow-hidden"
+      aria-labelledby="about-heading"
+    >
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-axkan-magenta/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-axkan-turquesa/10 rounded-full blur-3xl" />
@@ -29,7 +33,7 @@ export default function About() {
               Nuestra Historia
             </span>
 
-            <h2 className="text-4xl md:text-5xl font-bold font-display mb-6 leading-tight">
+            <h2 id="about-heading" className="text-4xl md:text-5xl font-bold font-display mb-6 leading-tight">
               El eterno{' '}
               <span className="text-axkan-turquesa">ahora</span>
               <br />de México
@@ -69,13 +73,13 @@ export default function About() {
             className="space-y-8"
           >
             {/* Jaguar Visual Placeholder */}
-            <div className="relative h-64 bg-gradient-to-br from-axkan-naranja/20 to-axkan-magenta/20 rounded-2xl flex items-center justify-center overflow-hidden">
-              <div className="text-9xl opacity-50">🐆</div>
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidiana/50 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4">
+            <figure className="relative h-64 bg-gradient-to-br from-axkan-naranja/20 to-axkan-magenta/20 rounded-2xl flex items-center justify-center overflow-hidden">
+              <div className="text-9xl opacity-50" aria-hidden="true">🐆</div>
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidiana/50 to-transparent" aria-hidden="true" />
+              <figcaption className="absolute bottom-4 left-4 right-4">
                 <p className="text-sm text-white/60">El jaguar — símbolo de poder y transformación en la cultura mesoamericana</p>
-              </div>
-            </div>
+              </figcaption>
+            </figure>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-6">

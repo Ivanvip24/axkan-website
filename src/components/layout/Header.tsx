@@ -3,26 +3,54 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const navigation = [
-  { name: 'Inicio', href: '#' },
-  { name: 'Productos', href: '#productos' },
+  { name: 'Inicio', href: '/' },
+  { name: 'Productos', href: '/#productos' },
   { name: 'Catálogo', href: '/catalogo' },
-  { name: 'Nosotros', href: '#nosotros' },
-  { name: 'Contacto', href: '#contacto' },
+  { name: 'Nosotros', href: '/#nosotros' },
+  { name: 'Contacto', href: '/#contacto' },
 ]
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
+
+      // Track active section for hash links
+      if (pathname === '/') {
+        const sections = ['contacto', 'nosotros', 'productos']
+        for (const section of sections) {
+          const element = document.getElementById(section)
+          if (element) {
+            const rect = element.getBoundingClientRect()
+            if (rect.top <= 150 && rect.bottom >= 150) {
+              setActiveSection(`/#${section}`)
+              return
+            }
+          }
+        }
+        if (window.scrollY < 100) {
+          setActiveSection('/')
+        }
+      }
     }
     window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initial check
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [pathname])
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/' && activeSection === '/'
+    if (href.startsWith('/#')) return activeSection === href
+    return pathname === href || pathname.startsWith(href + '/')
+  }
 
   return (
     <header
@@ -51,23 +79,35 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-8" role="navigation" aria-label="Navegación principal">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-obsidiana/80 hover:text-axkan-magenta transition-colors font-medium"
+                className={`relative font-medium transition-colors ${
+                  isActive(item.href)
+                    ? 'text-axkan-magenta'
+                    : 'text-obsidiana/80 hover:text-axkan-magenta'
+                }`}
+                aria-current={isActive(item.href) ? 'page' : undefined}
               >
                 {item.name}
+                {isActive(item.href) && (
+                  <motion.span
+                    layoutId="activeNav"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-axkan-magenta rounded-full"
+                  />
+                )}
               </Link>
             ))}
             <Link
               href="/pedido"
               className="px-6 py-2.5 bg-gradient-to-r from-axkan-magenta to-axkan-rojo text-white font-semibold rounded-full hover:shadow-lg hover:scale-105 transition-all"
+              aria-label="Hacer pedido de productos AXKAN"
             >
               Hacer Pedido
             </Link>
-          </div>
+          </nav>
 
           {/* Mobile Menu Button */}
           <button
@@ -99,19 +139,26 @@ export default function Header() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
+          <motion.nav
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-white border-t"
+            role="navigation"
+            aria-label="Navegación móvil"
           >
             <div className="px-4 py-6 space-y-4">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block text-lg text-obsidiana/80 hover:text-axkan-magenta transition-colors"
+                  className={`block text-lg transition-colors ${
+                    isActive(item.href)
+                      ? 'text-axkan-magenta font-semibold'
+                      : 'text-obsidiana/80 hover:text-axkan-magenta'
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>
@@ -120,11 +167,12 @@ export default function Header() {
                 href="/pedido"
                 className="block w-full text-center px-6 py-3 bg-gradient-to-r from-axkan-magenta to-axkan-rojo text-white font-semibold rounded-full"
                 onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="Hacer pedido de productos AXKAN"
               >
                 Hacer Pedido
               </Link>
             </div>
-          </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
     </header>

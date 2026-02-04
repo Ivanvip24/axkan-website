@@ -18,7 +18,10 @@ const staggerContainer = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      aria-labelledby="hero-heading"
+    >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-crema via-white to-axkan-turquesa/10" />
 
@@ -62,6 +65,7 @@ export default function Hero() {
 
           {/* Main Headline */}
           <motion.h1
+            id="hero-heading"
             variants={fadeInUp}
             transition={{ duration: 0.6 }}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-display leading-tight"
@@ -85,50 +89,52 @@ export default function Hero() {
             </span>
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* Single Focused CTA */}
           <motion.div
             variants={fadeInUp}
             transition={{ duration: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+            className="pt-4"
           >
             <Link
               href="/catalogo"
-              className="group relative px-8 py-4 bg-gradient-to-r from-axkan-magenta via-axkan-rojo to-axkan-naranja text-white font-semibold text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden"
+              className="group relative inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-axkan-magenta via-axkan-rojo to-axkan-naranja text-white font-semibold text-lg rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden"
+              aria-label="Explorar catálogo de productos AXKAN"
             >
-              <span className="relative z-10">Ver Catálogo</span>
+              <span className="relative z-10">Explorar Catálogo</span>
+              <svg className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
               <div className="absolute inset-0 bg-gradient-to-r from-axkan-naranja via-axkan-rojo to-axkan-magenta opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
-            <Link
-              href="/pedido"
-              className="px-8 py-4 bg-white text-obsidiana font-semibold text-lg rounded-full border-2 border-obsidiana/20 hover:border-axkan-turquesa hover:text-axkan-turquesa transition-all duration-300"
-            >
-              Hacer Pedido →
-            </Link>
+            <p className="mt-4 text-sm text-obsidiana/50">
+              Más de 500 diseños disponibles · Envío a todo México
+            </p>
           </motion.div>
 
           {/* Trust Indicators */}
-          <motion.div
+          <motion.ul
             variants={fadeInUp}
             transition={{ duration: 0.6 }}
             className="pt-12 flex flex-wrap items-center justify-center gap-8 text-obsidiana/60"
+            aria-label="Beneficios de AXKAN"
           >
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🇲🇽</span>
+            <li className="flex items-center gap-2">
+              <span className="text-2xl" aria-hidden="true">🇲🇽</span>
               <span className="text-sm font-medium">Hecho en México</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">✨</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-2xl" aria-hidden="true">✨</span>
               <span className="text-sm font-medium">Calidad Premium</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🚚</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-2xl" aria-hidden="true">🚚</span>
               <span className="text-sm font-medium">Envío Nacional</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">💎</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-2xl" aria-hidden="true">💎</span>
               <span className="text-sm font-medium">+500 Diseños</span>
-            </div>
-          </motion.div>
+            </li>
+          </motion.ul>
         </motion.div>
       </div>
 

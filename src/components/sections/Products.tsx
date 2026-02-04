@@ -113,47 +113,49 @@ export default function Products({ categories }: ProductsProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
             >
-              {/* First category gets Popular badge */}
-              {index === 0 && (
-                <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-axkan-rojo text-white text-xs font-bold rounded-full">
-                  Más Popular
-                </div>
-              )}
-
-              {/* Category Image */}
-              <div className={`h-48 ${colorMap[category.color] || 'bg-axkan-magenta'} flex items-center justify-center relative overflow-hidden`}>
-                {category.image?.url ? (
-                  <Image
-                    src={category.image.url}
-                    alt={category.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="text-6xl opacity-30">🎨</div>
+              <Link
+                href={`/catalogo?category=${category.slug.current}`}
+                className="group block relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                aria-label={`Ver productos de ${category.name}`}
+              >
+                {/* First category gets Popular badge */}
+                {index === 0 && (
+                  <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-axkan-rojo text-white text-xs font-bold rounded-full">
+                    Más Popular
+                  </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </div>
 
-              {/* Category Info */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-obsidiana mb-2 font-display">
-                  {category.name}
-                </h3>
-                <p className="text-obsidiana/60 text-sm mb-4 leading-relaxed">
-                  {category.description || 'Descubre nuestra colección de productos mexicanos.'}
-                </p>
-                <div className="flex items-center justify-between">
-                  <Link
-                    href={`/catalogo?category=${category.slug.current}`}
-                    className="text-sm font-semibold text-axkan-turquesa hover:text-axkan-magenta transition-colors"
-                  >
-                    Ver más →
-                  </Link>
+                {/* Category Image */}
+                <div className={`h-48 ${colorMap[category.color] || 'bg-axkan-magenta'} flex items-center justify-center relative overflow-hidden`}>
+                  {category.image?.url ? (
+                    <Image
+                      src={category.image.url}
+                      alt={category.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="text-6xl opacity-30 group-hover:scale-110 transition-transform">🎨</div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
-              </div>
+
+                {/* Category Info */}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-obsidiana mb-2 font-display group-hover:text-axkan-magenta transition-colors">
+                    {category.name}
+                  </h3>
+                  <p className="text-obsidiana/60 text-sm mb-4 leading-relaxed">
+                    {category.description || 'Descubre nuestra colección de productos mexicanos.'}
+                  </p>
+                  <div className="flex items-center">
+                    <span className="text-sm text-obsidiana/40 group-hover:text-axkan-turquesa transition-colors">
+                      Ver productos →
+                    </span>
+                  </div>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>
@@ -180,18 +182,25 @@ export default function Products({ categories }: ProductsProps) {
           </div>
         </motion.div>
 
-        {/* CTA */}
-        <div className="text-center mt-12">
+        {/* Single Focused CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="text-center mt-12"
+        >
           <Link
             href="/catalogo"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-axkan-magenta to-axkan-rojo text-white font-semibold text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            className="group inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-axkan-magenta to-axkan-rojo text-white font-semibold text-lg rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+            aria-label="Ver catálogo completo de productos"
           >
             <span>Ver Catálogo Completo</span>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
-        </div>
+        </motion.div>
       </div>
 
       <style jsx>{`
