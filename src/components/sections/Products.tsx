@@ -17,141 +17,201 @@ type ProductsProps = {
   categories: Category[]
 }
 
-type ProductCard = {
-  id: string
-  title: string
-  label: string
-  subtitle: string
-  image: string
-  href: string
-  buyHref: string
-  size: 'full' | 'half'
-  bg: string
-  accent: string
+const colorMap: Record<string, string> = {
+  magenta: 'bg-axkan-magenta',
+  verde: 'bg-axkan-verde',
+  naranja: 'bg-axkan-naranja',
+  turquesa: 'bg-axkan-turquesa',
+  rojo: 'bg-axkan-rojo',
 }
 
-const productCards: ProductCard[] = [
+// Fallback data when Sanity has no categories yet
+const fallbackCategories: Category[] = [
   {
-    id: '1',
-    title: 'Imanes MDF',
-    label: 'Producto Estrella',
-    subtitle: 'Relieve 3D, colores vibrantes y el destino grabado con orgullo mexicano.',
-    image: '/images/hero-magnet.jpg',
-    href: '/catalogo?category=imanes',
-    buyHref: '/pedido',
-    size: 'full',
-    bg: 'bg-white',
-    accent: 'bg-axkan-magenta',
+    _id: '1',
+    name: 'Imanes de MDF',
+    slug: { current: 'imanes' },
+    description: 'Captura tus destinos favoritos con nuestros imanes premium de MDF con acabado brillante.',
+    color: 'magenta',
+    image: null,
   },
   {
-    id: '2',
-    title: 'Llaveros',
-    label: 'Para Cada Viajero',
-    subtitle: 'Tu destino favorito siempre contigo. Corte láser sobre MDF con acabado premium.',
-    image: '/images/product-keychain.png',
-    href: '/catalogo?category=llaveros',
-    buyHref: '/pedido',
-    size: 'full',
-    bg: 'bg-[#f5f5f5]',
-    accent: 'bg-axkan-turquesa',
+    _id: '2',
+    name: 'Llaveros',
+    slug: { current: 'llaveros' },
+    description: 'Lleva México contigo a todos lados con nuestros llaveros de alta resistencia.',
+    color: 'turquesa',
+    image: null,
   },
   {
-    id: '3',
-    title: 'Portallaves',
-    label: 'Para el Hogar',
-    subtitle: 'Funcional y decorativo. Cada portallaves cuenta la historia de un destino.',
-    image: '/images/product-keyholder.png',
-    href: '/catalogo?category=portallaves',
-    buyHref: '/pedido',
-    size: 'half',
-    bg: 'bg-white',
-    accent: 'bg-axkan-verde',
+    _id: '3',
+    name: 'Destapadores',
+    slug: { current: 'destapadores' },
+    description: 'Funcionales y decorativos, perfectos para cualquier ocasión mexicana.',
+    color: 'verde',
+    image: null,
   },
   {
-    id: '4',
-    title: 'Destapadores',
-    label: 'El Favorito',
-    subtitle: 'Útiles, divertidos y 100% coleccionables. El souvenir que todos quieren.',
-    image: '/images/product-magnet.png',
-    href: '/catalogo?category=destapadores',
-    buyHref: '/pedido',
-    size: 'half',
-    bg: 'bg-[#f5f5f5]',
-    accent: 'bg-axkan-naranja',
+    _id: '4',
+    name: 'Portallaves',
+    slug: { current: 'portallaves' },
+    description: 'Decora tu hogar con arte mexicano funcional que cuenta historias.',
+    color: 'naranja',
+    image: null,
   },
 ]
 
+const destinations = [
+  'Huasteca Potosina', 'Oaxaca', 'Cancún', 'CDMX', 'Guanajuato',
+  'San Miguel', 'Puerto Vallarta', 'Chiapas', 'Yucatán', 'Acapulco',
+]
+
 export default function Products({ categories }: ProductsProps) {
-  // Override with Sanity data if available
-  const cards = productCards.map((card, i) => {
-    if (categories[i]?.image?.url) {
-      return { ...card, image: categories[i].image!.url }
-    }
-    return card
-  })
+  // Use Sanity categories or fallback to default
+  const displayCategories = categories.length > 0 ? categories : fallbackCategories
 
   return (
-    <section id="productos" className="bg-[#f5f5f7]">
-      <div className="max-w-[980px] mx-auto px-4 py-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        {cards.map((card, index) => (
-          <motion.div
-            key={card.id}
-            initial={{ opacity: 0, y: 30 }}
+    <section id="productos" className="py-24 bg-gradient-to-b from-white to-crema relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: index * 0.08 }}
-            className={`${card.size === 'full' ? 'md:col-span-2' : 'col-span-1'}`}
+            viewport={{ once: true }}
+            className="inline-block px-4 py-1.5 bg-axkan-verde/10 text-axkan-verde rounded-full text-sm font-semibold mb-4"
           >
-            <div className={`${card.bg} rounded-[20px] overflow-hidden relative text-center py-12 px-6 md:py-16`}>
-              {/* Accent line */}
-              <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-12 h-[3px] rounded-full ${card.accent}`} />
+            Nuestros Productos
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold font-display text-obsidiana mb-4"
+          >
+            Souvenirs que{' '}
+            <span className="text-axkan-magenta">sí</span> importan
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-obsidiana/60 max-w-2xl mx-auto"
+          >
+            Cada pieza cuenta una historia de mil años de tradición mexicana.
+          </motion.p>
+        </div>
 
-              {/* Label */}
-              <p className="text-[11px] font-bold tracking-[0.14em] uppercase text-obsidiana/40 mb-1.5">
-                {card.label}
-              </p>
+        {/* Products Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {displayCategories.map((category, index) => (
+            <motion.div
+              key={category._id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Link
+                href={`/catalogo?category=${category.slug.current}`}
+                className="group block relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                aria-label={`Ver productos de ${category.name}`}
+              >
+                {/* First category gets Popular badge */}
+                {index === 0 && (
+                  <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-axkan-rojo text-white text-xs font-bold rounded-full">
+                    Más Popular
+                  </div>
+                )}
 
-              {/* Title */}
-              <h2 className="font-display text-[clamp(28px,6vw,48px)] font-black text-obsidiana leading-tight mb-2">
-                {card.title}
-              </h2>
+                {/* Category Image */}
+                <div className={`h-48 ${colorMap[category.color] || 'bg-axkan-magenta'} flex items-center justify-center relative overflow-hidden`}>
+                  {category.image?.url ? (
+                    <Image
+                      src={category.image.url}
+                      alt={category.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="text-6xl opacity-30 group-hover:scale-110 transition-transform">🎨</div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </div>
 
-              {/* Subtitle */}
-              <p className="text-[15px] text-obsidiana/50 leading-relaxed max-w-xs mx-auto mb-6">
-                {card.subtitle}
-              </p>
+                {/* Category Info */}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-obsidiana mb-2 font-display group-hover:text-axkan-magenta transition-colors">
+                    {category.name}
+                  </h3>
+                  <p className="text-obsidiana/60 text-sm mb-4 leading-relaxed">
+                    {category.description || 'Descubre nuestra colección de productos mexicanos.'}
+                  </p>
+                  <div className="flex items-center">
+                    <span className="text-sm text-obsidiana/40 group-hover:text-axkan-turquesa transition-colors">
+                      Ver productos →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
 
-              {/* Buttons */}
-              <div className="flex items-center justify-center gap-3 mb-8">
-                <Link
-                  href={card.href}
-                  className="inline-flex items-center px-6 py-2.5 bg-axkan-magenta text-white text-sm font-semibold rounded-full shadow-[0_4px_16px_rgba(231,42,136,0.3)] hover:shadow-[0_6px_24px_rgba(231,42,136,0.45)] hover:-translate-y-0.5 active:scale-95 transition-all"
-                >
-                  Ver más
-                </Link>
-                <Link
-                  href={card.buyHref}
-                  className="inline-flex items-center px-6 py-2.5 border-[1.5px] border-axkan-magenta text-axkan-magenta text-sm font-semibold rounded-full hover:bg-axkan-magenta/5 hover:-translate-y-0.5 active:scale-95 transition-all"
-                >
-                  Comprar
-                </Link>
-              </div>
+        {/* Destinations Marquee */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="relative overflow-hidden py-8 bg-obsidiana rounded-2xl"
+        >
+          <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-obsidiana to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-obsidiana to-transparent z-10" />
 
-              {/* Product Image */}
-              <div className={`relative mx-auto ${card.size === 'full' ? 'max-w-md md:max-w-lg' : 'max-w-xs'}`}>
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  width={card.size === 'full' ? 560 : 320}
-                  height={card.size === 'full' ? 420 : 280}
-                  className="w-full h-auto object-contain drop-shadow-[0_10px_28px_rgba(0,0,0,0.12)]"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </motion.div>
-        ))}
+          <div className="flex animate-marquee whitespace-nowrap">
+            {[...destinations, ...destinations].map((dest, i) => (
+              <span
+                key={i}
+                className="mx-8 text-2xl font-bold text-white/20 hover:text-white/60 transition-colors cursor-default"
+              >
+                {dest}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Single Focused CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="text-center mt-12"
+        >
+          <Link
+            href="/catalogo"
+            className="group inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-axkan-magenta to-axkan-rojo text-white font-semibold text-lg rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+            aria-label="Ver catálogo completo de productos"
+          >
+            <span>Ver Catálogo Completo</span>
+            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </motion.div>
       </div>
+
+      <style jsx>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 20s linear infinite;
+        }
+      `}</style>
     </section>
   )
 }
