@@ -7,6 +7,9 @@ import { sanityFetch } from '@/sanity/client'
 import { categoriesQuery, productsQuery } from '@/sanity/queries'
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/catalogo',
+  },
   title: 'Catálogo | AXKAN - Souvenirs Premium Mexicanos',
   description: 'Explora nuestra colección de souvenirs premium mexicanos. Imanes, llaveros, destapadores y portallaves con diseños auténticos de México.',
   openGraph: {

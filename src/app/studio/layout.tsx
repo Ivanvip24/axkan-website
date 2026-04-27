@@ -1,6 +1,10 @@
 export const metadata = {
   title: 'AXKAN Studio',
   description: 'Content Management System for AXKAN website',
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function StudioLayout({

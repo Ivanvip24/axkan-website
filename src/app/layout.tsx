@@ -16,6 +16,10 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://axkan.art'),
+  alternates: {
+    canonical: '/',
+  },
   title: 'AXKAN | Recuerdos Hechos Souvenir',
   description: 'Souvenirs premium mexicanos que despiertan orgullo. Imanes, llaveros y más con diseños auténticos de los destinos más hermosos de México.',
   keywords: ['souvenirs méxico', 'imanes turísticos', 'recuerdos mexicanos', 'axkan', 'llaveros personalizados'],

@@ -7,6 +7,9 @@ import { sanityFetch } from '@/sanity/client'
 import { categoriesQuery } from '@/sanity/queries'
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: '/pedido',
+  },
   title: 'Hacer Pedido | AXKAN - Souvenirs Premium Mexicanos',
   description: 'Ordena tus souvenirs AXKAN. Envío a todo México. Diseños personalizados disponibles.',
   openGraph: {

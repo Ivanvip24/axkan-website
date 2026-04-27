@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 type Category = {
   _id: string
@@ -30,6 +30,7 @@ type Product = {
 type CatalogClientProps = {
   categories: Category[]
   products: Product[]
+  activeCategory?: string
 }
 
 const colorMap: Record<string, string> = {
@@ -148,9 +149,10 @@ const fallbackCategories: Category[] = [
   { _id: '4', name: 'Portallaves', slug: { current: 'portallaves' }, description: 'Arte para tu hogar', color: 'naranja', image: null },
 ]
 
-export default function CatalogClient({ categories, products }: CatalogClientProps) {
+export default function CatalogClient({ categories, products, activeCategory }: CatalogClientProps) {
   const searchParams = useSearchParams()
-  const initialCategory = searchParams.get('category') || 'all'
+  const router = useRouter()
+  const initialCategory = activeCategory || searchParams.get('category') || 'all'
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory)
   const [searchQuery, setSearchQuery] = useState('')
@@ -266,8 +268,9 @@ export default function CatalogClient({ categories, products }: CatalogClientPro
           {/* Category Tabs */}
           <div className="mt-4 pt-4 border-t border-obsidiana/10">
             <div className="flex flex-wrap gap-2" role="tablist" aria-label="Categorías de productos">
-              <button
-                onClick={() => setSelectedCategory('all')}
+              <Link
+                href="/catalogo"
+                onClick={(e) => { e.preventDefault(); setSelectedCategory('all'); router.push('/catalogo') }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedCategory === 'all'
                     ? 'bg-obsidiana text-white'
@@ -277,11 +280,12 @@ export default function CatalogClient({ categories, products }: CatalogClientPro
                 aria-selected={selectedCategory === 'all'}
               >
                 Todos
-              </button>
+              </Link>
               {displayCategories.map((cat) => (
-                <button
+                <Link
                   key={cat._id}
-                  onClick={() => setSelectedCategory(cat.slug.current)}
+                  href={`/catalogo/${cat.slug.current}`}
+                  onClick={(e) => { e.preventDefault(); setSelectedCategory(cat.slug.current); router.push(`/catalogo/${cat.slug.current}`) }}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     selectedCategory === cat.slug.current
                       ? `${colorMap[cat.color] || 'bg-axkan-magenta'} text-white`
@@ -291,7 +295,7 @@ export default function CatalogClient({ categories, products }: CatalogClientPro
                   aria-selected={selectedCategory === cat.slug.current}
                 >
                   {cat.name}
-                </button>
+                </Link>
               ))}
             </div>
           </div>

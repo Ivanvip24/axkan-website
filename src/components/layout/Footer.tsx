@@ -4,10 +4,10 @@ import Link from 'next/link'
 
 const footerLinks = {
   productos: [
-    { name: 'Imanes', href: '/catalogo?category=imanes' },
-    { name: 'Llaveros', href: '/catalogo?category=llaveros' },
-    { name: 'Destapadores', href: '/catalogo?category=destapadores' },
-    { name: 'Portallaves', href: '/catalogo?category=portallaves' },
+    { name: 'Imanes', href: '/catalogo/imanes-de-mdf' },
+    { name: 'Llaveros', href: '/catalogo/llaveros-de-mdf' },
+    { name: 'Destapadores', href: '/catalogo/destapadores' },
+    { name: 'Portallaves', href: '/catalogo/portallaves' },
     { name: 'Personalizado', href: '/personalizado' },
   ],
   empresa: [
